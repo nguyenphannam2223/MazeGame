@@ -17,7 +17,7 @@ public class Maze {
     map = new String[rows]; // tạo số element dựa trên số row
     map[0] = ".....";
     map[1] = ".   X";
-    map[2] = ".....";
+    map[2] = ". ...";
     map[3] = ".   .";
     map[4] = ".....";
     robotRow = 2;
@@ -59,12 +59,17 @@ public class Maze {
     } else if (map[currentRow].charAt(currentCol) == '.') {
       // Wall
       steps++;
+      // Alert if the robot hits a wall & print the current position (Phúc)
+      System.out.println("The robot hits a wall");
+      System.out.println("Current location: (" + robotRow + ", " + robotCol + ")");
       return "false";
     } else {
       // Space => update robot location
       steps++;
       robotRow = currentRow;
       robotCol = currentCol;
+      // Print the current position (Phúc)
+      System.out.println("Current location: (" + robotRow + ", " + robotCol + ")");
       return "true";
     }
   }
