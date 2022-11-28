@@ -25,6 +25,80 @@ public class Maze {
     steps = 0;
   }
 
+  //Check position above the robot
+  public boolean checkDirectionUp() {
+    int currentRow = robotRow;
+    int currentCol = robotCol;
+
+
+    //check above the robot
+    if (currentRow > 0) {
+      if (map[currentRow - 1].charAt(currentCol) == '.') {
+        System.out.println("The robot cannot go up");
+        return false;
+      }
+    } else if (currentRow == 0) {
+      System.out.println("The robot cannot go up");
+    }
+    return true;
+  }
+
+  //check position below the robot
+  public boolean checkDirectionDown() {
+    int currentRow = robotRow;
+    int currentCol = robotCol;
+
+
+    //check below the robot
+    if (currentRow < rows) {
+      if (map[currentRow + 1].charAt(currentCol) == '.') {
+        System.out.println("The robot cannot go down");
+        return false;
+      }
+    } else if (currentRow == rows) {
+      System.out.println("The robot cannot go down");
+    }
+    return true;
+  }
+
+  //check position left of the robot
+  public boolean checkDirectionleft() {
+    int currentRow = robotRow;
+    int currentCol = robotCol;
+
+
+    //check left the robot
+    if (currentCol > 0) {
+      if (map[currentRow].charAt(currentCol - 1) == '.') {
+        System.out.println("The robot cannot go left");
+        return false;
+      }
+    } else if (currentCol == 0) {
+      System.out.println("The robot cannot go left");
+    }
+    return true;
+  }
+
+  //check position right of the robot
+  public boolean checkDirectionRight() {
+    int currentRow = robotRow;
+    int currentCol = robotCol;
+
+
+    //check right the robot
+    if (currentCol < cols) {
+      if (map[currentRow].charAt(currentCol + 1) == '.') {
+        System.out.println("The robot cannot go right");
+        return false;
+      }
+    } else if (currentCol == cols) {
+      System.out.println("The robot cannot go right");
+    }
+    return true;
+  }
+
+
+
   public String go(String direction) {
     // check direction ko phải up, dowm, left, right
     if (!direction.equals("UP") &&
