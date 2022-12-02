@@ -27,47 +27,17 @@ public class MazeTest {
       // map[4] = ".....";
   
       map = new String[]{
-        "........",
-        ".      .",
-        ".   .  X",
-        ".      .",
-        "....   .",
-        ".      .",
-        ".      .",
-        "........",
-
-  
-        // "....................................................................................................",
-        // ".                                              ..                                                  .",
-        // ".                                              ..                          ..                      .",
-        // ".                                              ..                          ..                      .",
-        // ".      ..............                          ..                  ...     ..                      .",
-        // ".            .............                     ..                  ...     ..   ....................",
-        // ".                                              ..                  ...     ..   ....................",
-        // ".       ....  .   .  .  .....                                                   ...     ..         .",
-        // ".       .  .  .. ..  .    .            ........                     .........   ...     ..         .",
-        // ".       ....  . . .  .    .            ........                    .........    ...     ..         .",
-        // ".       ..    .   .  .    .            ........                                 ...     ..         .",
-        // ".       . .   .   .  .    .        .   ........                        ..                       ....",
-        // ".       .  .  .   .  .    .        .   ........                        ..                       ....",
-        // ".                                  .                                   ..  ..           .......    .",
-        // ".    ..       ..    ..       ..    .        ..      ..    ...          ..  ..           .......    .",
-        // ".    ....     ..    ....     ..    .        ..      ..    .....        ..  ..                      .",
-        // ".    .. ..    ..    .. ..    ..        .    ..      ..    ..  ...  ..      ..                      .",
-        // ".    ..  ..   ..    ..  ..   ..   .......   ..........    ..   ..  ..      ..                      .",
-        // ".    ..   ..  ..    ..   ..  ..   .......   ..........    ..   ..  ..      ..                      .",
-        // ".    ..    .. ..    ..    .. ..        .    ..      ..    ..  ...          ..                      .",
-        // ".    ..     ....    ..     ....             ..      ..    .....            ..    ..........        .",
-        // ".    ..       ..    ..       ..             ..      ..    ...              ..    ..........        .",
-        // ".                                                                          ..                      .",
-        // ".      .            .           .            .                             ..          X           .",
-        // ".      .     .      .           .            .                             ..                      .",
-        // ".      .     .      .                        .        .                    ..                      .",
-        // ".      .     .      .                        .        .                    ..                      .",
-        // ".      .     .      .           .            .        .                    ..                      .",
-        // ".            .                  .                     .                    ..                      .",
-        // "....................................................................................................",
+              "........",
+              ".      .",
+              ".  .....",
+              ".      .",
+              "..   ...",
+              ".      .",
+              ".    X .",
+              "........",
       };
+
+
   
       rows = 8;
       cols = 8;
@@ -87,17 +57,16 @@ public class MazeTest {
       int currentCol = robotCol;
 
 
-
       //check above the robot
       if (currentRow > 0) {
         if (map[currentRow - 1].charAt(currentCol) == '.') {
           System.out.println("The robot cannot go up");
           return false;
         }
-      } else if (currentRow == 0) {
+      } else if (currentRow == 1) {
         System.out.println("The robot cannot go up");
       } else {
-        return true;
+        return false;
       }
       return true;
     }
@@ -116,12 +85,13 @@ public class MazeTest {
         }
       } else if (currentRow == rows) {
         System.out.println("The robot cannot go down");
+        return false;
       }
       return true;
     }
   
     //check position left of the robot
-    public boolean checkDirectionleft() {
+    public boolean checkDirectionLeft() {
       int currentRow = robotRow;
       int currentCol = robotCol;
   
@@ -132,8 +102,9 @@ public class MazeTest {
           System.out.println("The robot cannot go left");
           return false;
         }
-      } else if (currentCol == 0) {
+      } else if (currentCol == 1) {
         System.out.println("The robot cannot go left");
+        return false;
       }
       return true;
     }
@@ -144,17 +115,12 @@ public class MazeTest {
       int currentCol = robotCol;
 
 
-
-
-  
       //check right the robot
       if (currentCol < cols) {
         if (map[currentRow].charAt(currentCol + 1) == '.') {
           System.out.println("The robot cannot go right");
           return false;
         }
-      } else if (currentCol == cols) {
-        System.out.println("The robot cannot go right");
       }
       return true;
     }
@@ -182,16 +148,17 @@ public class MazeTest {
             case "UP" -> currentRow--;
             case "DOWN" -> currentRow++;
             case "LEFT" -> currentCol--;
-            default -> currentCol++;
+            case "RIGHT" -> currentCol++;
         }
   
-      // check the next position
+      // check current position
       if (map[currentRow].charAt(currentCol) == 'X') {
         // Exit gate
         steps++;
+
         robotRow = currentRow;
         robotCol = currentCol;
-        System.out.println("The location of X is: (" + robotRow + ", " + robotCol + ")");
+        System.out.println("The location of X is: (" + robotCol + ", " + robotRow + ")");
 
 
         System.out.println("The robot has reached the Exit Gate");
@@ -206,7 +173,7 @@ public class MazeTest {
         robotCol = currentCol;
 
         // Print the current position (Phúc)
-        System.out.println("Current location: (" + robotRow + ", " + robotCol + ")");
+        System.out.println("Current location: (" + robotCol + ", " + robotRow + ")");
         return "true";
       }
     }
@@ -215,69 +182,146 @@ public class MazeTest {
   
     public static void main(String[] args) {
 
-
-
       new Robot().navigate();
     }
   }
 
 
   class Robot {
-    // A very simple implementation
-    // where the robot just go randomly
-    ArrayList<ArrayList<Integer>> visitedCoordinates = new ArrayList<>();
-    ArrayList<ArrayList<Integer>> deadendCoordinates = new ArrayList<ArrayList<Integer>>();
+      // A very simple implementation
+      // where the robot just go randomly
+      ArrayList<ArrayList<Integer>> visitedCoordinates = new ArrayList<>();
 
-
-    public void navigate() {
       MazeTest maze = new MazeTest();
-      // maze.findWayOutLocation();
 
-  
+      String result = "";
+
+      public void solveDeadEnd(int numberOfStepBack) {
+
+          int previousRow, previousCol;
 
 
-          for (int i = 0; i <= visitedCoordinates.size(); ++i) {
+          previousCol = visitedCoordinates.get(visitedCoordinates.size() - numberOfStepBack).get(0);
+          previousRow = visitedCoordinates.get(visitedCoordinates.size() - numberOfStepBack).get(1);
 
+
+
+
+          if (previousCol < maze.robotCol && previousRow == maze.robotRow) {
+              System.out.println("LEFT");
+              result = maze.go("LEFT");
+          } else if (previousCol > maze.robotCol && previousRow == maze.robotRow) {
+              System.out.println("RIGHT");
+              result = maze.go("RIGHT");
+          } else if (previousRow < maze.robotRow && previousCol == maze.robotCol) {
+              System.out.println("UP");
+               result = maze.go("UP");
+          } else {
+              System.out.println("DOWN");
+              result = maze.go("DOWN");
+          }
+
+          ArrayList<Integer>nextUpCoords = new ArrayList<>();
+          ArrayList<Integer>nextRightCoords = new ArrayList<>();
+          ArrayList<Integer>nextDownCoords = new ArrayList<>();
+          ArrayList<Integer>nextLeftCoords = new ArrayList<>();
+
+          nextUpCoords.add(0, maze.robotCol);
+          nextUpCoords.add(1, maze.robotRow - 1);
+
+          nextRightCoords.add(0, maze.robotCol + 1);
+          nextRightCoords.add(1, maze.robotRow);
+
+          nextDownCoords.add(0, maze.robotCol);
+          nextDownCoords.add(1, maze.robotRow + 1);
+
+          nextLeftCoords.add(0, maze.robotCol - 1);
+          nextLeftCoords.add(1, maze.robotRow);
+
+          if (maze.checkDirectionUp() && !visitedCoordinates.contains(nextUpCoords)) {
+              solver();
+          } else if (maze.checkDirectionRight() && !visitedCoordinates.contains(nextRightCoords)) {
+              solver();
+          } else if (maze.checkDirectionDown() && !visitedCoordinates.contains(nextDownCoords)) {
+              solver();
+          } else if (maze.checkDirectionLeft() && !visitedCoordinates.contains(nextLeftCoords)) {
+              solver();
+          } else {
+              solveDeadEnd(numberOfStepBack + 2);
+          }
+
+      }
+
+
+
+
+    public void solver() {
+          // maze.findWayOutLocation();
+
+
+
+            while (!result.equals("win")) {
 
               ArrayList<Integer>nextUpCoords = new ArrayList<>();
-              int[] nextRightCoords = {maze.robotRow, maze.robotCol + 1};
+              ArrayList<Integer>nextRightCoords = new ArrayList<>();
+              ArrayList<Integer>nextDownCoords = new ArrayList<>();
+              ArrayList<Integer>nextLeftCoords = new ArrayList<>();
 
-              nextUpCoords.add(0, maze.robotRow - 1);
-              nextUpCoords.add(1, maze.robotCol);
 
 
-              String result = "";
+              nextUpCoords.add(0, maze.robotCol);
+              nextUpCoords.add(1, maze.robotRow - 1);
+
+              nextRightCoords.add(0, maze.robotCol + 1);
+              nextRightCoords.add(1, maze.robotRow);
+
+              nextDownCoords.add(0, maze.robotCol);
+              nextDownCoords.add(1, maze.robotRow + 1);
+
+              nextLeftCoords.add(0, maze.robotCol - 1);
+              nextLeftCoords.add(1, maze.robotRow);
+
+
+
 
               visitedCoordinates.add(new ArrayList<Integer>());
-              visitedCoordinates.get(i).add(0, maze.robotRow);
-              visitedCoordinates.get(i).add(1, maze.robotCol);
 
-              System.out.println(nextUpCoords);
+
+
+              visitedCoordinates.get(visitedCoordinates.size() - 1).add(0, maze.robotCol);
+              visitedCoordinates.get(visitedCoordinates.size() - 1).add(1, maze.robotRow);
+
+
+
               System.out.println(visitedCoordinates);
 
 
 
-
-
               System.out.println("________________________");
+
               if (maze.checkDirectionUp() && !visitedCoordinates.contains(nextUpCoords)) {
                   System.out.println("UP");
                   result = maze.go("UP");
               } else if (maze.checkDirectionRight() && !visitedCoordinates.contains(nextRightCoords)) {
                   System.out.println("RIGHT");
                   result = maze.go("RIGHT");
-              } else if (maze.checkDirectionDown()) {
+              } else if (maze.checkDirectionDown() && !visitedCoordinates.contains(nextDownCoords)) {
                   System.out.println("DOWN");
                   result = maze.go("DOWN");
-              } else {
+              } else if (maze.checkDirectionLeft() && !visitedCoordinates.contains(nextLeftCoords)) {
                   System.out.println("LEFT");
                   result = maze.go("LEFT");
+              } else {
+                  solveDeadEnd(2);
               }
 
-              if (result.equals("win")){
-                  break;
-              }
           }
+
+      }
+
+    public void navigate() {
+      solver();
+
       }
     }
 
