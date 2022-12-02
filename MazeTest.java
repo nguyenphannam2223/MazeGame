@@ -1,6 +1,7 @@
 // package project_real;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MazeTest {
     int rows; // số hàng
@@ -26,25 +27,15 @@ public class MazeTest {
       // map[4] = ".....";
   
       map = new String[]{
-        ".....................................",
-        ".                                   X",
-        ".   .   .....   .   .   .   .   .   .",
-        ".       .       .   .   .   .   .   .",
-        ".........   .....   .   .   .   .   .",
-        ".       .       .   .   .       .   .",
-        ".   .   .....   .   .   .........   .",
-        ".   .       .       .               .",
-        ".   .................   .............",
-        ".                   .       .       .",
-        ".   .............   .....   .   .   .",
-        ".       .       .           .   .   .",
-        ".....   .   .....................   .",
-        ".       .               .           .",
-        ".   .............   .   .....   .   .",
-        ".               .   .   .       .   .",
-        ".............   .   .   .   .....   .",
-        ".                   .       .       .",
-        "....................................."
+        "........",
+        ".      .",
+        ".   .  X",
+        ".      .",
+        "....   .",
+        ".      .",
+        ".      .",
+        "........",
+
   
         // "....................................................................................................",
         // ".                                              ..                                                  .",
@@ -78,14 +69,18 @@ public class MazeTest {
         // "....................................................................................................",
       };
   
-      rows = map.length;
-      cols = map[0].length();
+      rows = 8;
+      cols = 8;
   
-      robotRow = 2;
+      robotRow = 1;
       robotCol = 1;
       steps = 0;
+
+
     }
-  
+
+
+
     //Check position above the robot
     public boolean checkDirectionUp() {
       int currentRow = robotRow;
@@ -147,7 +142,10 @@ public class MazeTest {
     public boolean checkDirectionRight() {
       int currentRow = robotRow;
       int currentCol = robotCol;
-  
+
+
+
+
   
       //check right the robot
       if (currentCol < cols) {
@@ -180,16 +178,12 @@ public class MazeTest {
       int currentCol = robotCol; // 1
   
       // check hướng đi robot và thay đổi vị trí
-      if (direction.equals("UP")) {
-        currentRow--;
-
-      } else if (direction.equals("DOWN")) {
-        currentRow++;
-      } else if (direction.equals("LEFT")) {
-        currentCol--;
-      } else {
-        currentCol++;
-      }
+        switch (direction) {
+            case "UP" -> currentRow--;
+            case "DOWN" -> currentRow++;
+            case "LEFT" -> currentCol--;
+            default -> currentCol++;
+        }
   
       // check the next position
       if (map[currentRow].charAt(currentCol) == 'X') {
@@ -203,6 +197,7 @@ public class MazeTest {
         System.out.println("The robot has reached the Exit Gate");
         System.out.println("Steps to reach the Exit gate " + steps);
         return "win";
+
       } else {
 
         // Space => update robot location
@@ -220,40 +215,55 @@ public class MazeTest {
   
     public static void main(String[] args) {
 
+
+
       new Robot().navigate();
     }
   }
 
 
-  
   class Robot {
     // A very simple implementation
     // where the robot just go randomly
     ArrayList<ArrayList<Integer>> visitedCoordinates = new ArrayList<>();
     ArrayList<ArrayList<Integer>> deadendCoordinates = new ArrayList<ArrayList<Integer>>();
 
+
     public void navigate() {
       MazeTest maze = new MazeTest();
       // maze.findWayOutLocation();
+
   
 
 
           for (int i = 0; i <= visitedCoordinates.size(); ++i) {
+
+
+              ArrayList<Integer>nextUpCoords = new ArrayList<>();
+              int[] nextRightCoords = {maze.robotRow, maze.robotCol + 1};
+
+              nextUpCoords.add(0, maze.robotRow - 1);
+              nextUpCoords.add(1, maze.robotCol);
+
+
               String result = "";
 
               visitedCoordinates.add(new ArrayList<Integer>());
               visitedCoordinates.get(i).add(0, maze.robotRow);
               visitedCoordinates.get(i).add(1, maze.robotCol);
 
+              System.out.println(nextUpCoords);
+              System.out.println(visitedCoordinates);
+
 
 
 
 
               System.out.println("________________________");
-              if (maze.checkDirectionUp()) {
+              if (maze.checkDirectionUp() && !visitedCoordinates.contains(nextUpCoords)) {
                   System.out.println("UP");
                   result = maze.go("UP");
-              } else if (maze.checkDirectionRight()) {
+              } else if (maze.checkDirectionRight() && !visitedCoordinates.contains(nextRightCoords)) {
                   System.out.println("RIGHT");
                   result = maze.go("RIGHT");
               } else if (maze.checkDirectionDown()) {
@@ -264,7 +274,7 @@ public class MazeTest {
                   result = maze.go("LEFT");
               }
 
-              if (result == "win"){
+              if (result.equals("win")){
                   break;
               }
           }
