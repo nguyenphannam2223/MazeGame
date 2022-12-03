@@ -27,20 +27,21 @@ public class MazeTest {
       // map[4] = ".....";
   
       map = new String[]{
-              "........",
-              ".      .",
-              ".  .....",
-              ".      .",
-              "..   ...",
-              ".      .",
-              ".    X .",
-              "........",
+              "............",
+              ".          .",
+              ".      .....",
+              ".X         .",
+              "..       ...",
+              ".          .",
+              ".          .",
+              ".          .",
+              "............"
       };
 
 
   
-      rows = 8;
-      cols = 8;
+      rows = 9;
+      cols = 12;
   
       robotRow = 1;
       robotCol = 1;
@@ -207,6 +208,7 @@ public class MazeTest {
 
 
 
+
           if (previousCol < maze.robotCol && previousRow == maze.robotRow) {
               System.out.println("LEFT");
               result = maze.go("LEFT");
@@ -220,6 +222,9 @@ public class MazeTest {
               System.out.println("DOWN");
               result = maze.go("DOWN");
           }
+
+          System.out.println("________________________");
+
 
           ArrayList<Integer>nextUpCoords = new ArrayList<>();
           ArrayList<Integer>nextRightCoords = new ArrayList<>();
@@ -247,7 +252,7 @@ public class MazeTest {
           } else if (maze.checkDirectionLeft() && !visitedCoordinates.contains(nextLeftCoords)) {
               solver();
           } else {
-              solveDeadEnd(numberOfStepBack + 2);
+              solveDeadEnd(numberOfStepBack + 1);
           }
 
       }
@@ -291,9 +296,6 @@ public class MazeTest {
               visitedCoordinates.get(visitedCoordinates.size() - 1).add(0, maze.robotCol);
               visitedCoordinates.get(visitedCoordinates.size() - 1).add(1, maze.robotRow);
 
-
-
-              System.out.println(visitedCoordinates);
 
 
 
