@@ -35,10 +35,10 @@ public class MazeTest {
             ..
              */
       ".....................................",
-      ".   .           .       .   .       .",
-      ".   .   .....   .   .   .   .   .   .",
-      ".       .       .   .   .   .   .   .",
-      ".........   .....   .   .   .   .   .",
+      ".                 .    .   .        .",
+      ".             . ...   .   .   .     .",
+      ".             .   .   .   .   .     .",
+      ".........    ....   .   .   .   .   .",
       ".       .       .   .   .       .   .",
       ".   .   .....   .   .   .........   .",
       ".   .       .       .               .",
@@ -251,9 +251,11 @@ class Robot {
 
       /*
       solving when robot goes into a dead-end, using recursion
+
       Definition of a dead-end:
       1) From the robot current location, 3 directions of the robot are walls and have no choice other than going back
-      2) From the robot current location, 4 directions of the robot are already visited coordinates
+      2) From the robot current location, 4 directions of the robot are already visited location
+
       Step to solve when robot reaches a dead-end:
       Step 1: get the robot's previous location from the current location
 
@@ -326,6 +328,7 @@ class Robot {
           leftCoords.add(0, maze.robotCol - 1);
           leftCoords.add(1, maze.robotRow);
 
+          // if the robot find a new path, call back solver()
           if (maze.checkDirectionUp() && !visitedCoordinates.contains(upperCoords)) {
             solver();
           } else if (maze.checkDirectionRight() && !visitedCoordinates.contains(rightCoords)) {
@@ -335,9 +338,12 @@ class Robot {
           } else if (maze.checkDirectionLeft() && !visitedCoordinates.contains(leftCoords)) {
             solver();
           } else {
+              /*
+               for every time solveDeadEnd() is called, the method will point to
+               the previous location compare to current location
+               */
               solveDeadEnd(numberOfStepBack + 1);
           }
-
       }
 
       /*
@@ -377,10 +383,11 @@ class Robot {
         visitedCoordinates.get(visitedCoordinates.size() - 1).add(0, maze.robotCol);
         visitedCoordinates.get(visitedCoordinates.size() - 1).add(1, maze.robotRow);
 
+
         System.out.println("________________________");
 
       /*
-      (moving priority: UP RIGHT DOWN LEFT)
+      (moving priority, clockwise: UP RIGHT DOWN LEFT)
       The robot traverses through the maze
       Step 1: the robot add its current location
 
@@ -431,14 +438,15 @@ class Robot {
     }
   }
 
-    // create a map to display the route that robot has taken
+    // create a map to display the route that robot has taken (Additional feature)
     ArrayList<String> mapAfter = new ArrayList<>();
  
+    // replacing " " with "+" for every location that robot passed by
+    public String replaceChar(String str, char ch, int index) {
+        return str.substring(0, index) + ch + str.substring(index + 1);
+    }
 
-  public String replaceChar(String str, char ch, int index) {
-    return str.substring(0, index) + ch + str.substring(index + 1);
-  }
-
+  // print the map
   public void printMapAfter() {
       mapAfter.addAll(Arrays.asList(maze.map));
   
@@ -453,6 +461,7 @@ class Robot {
         }
     }
 
+    // print the robot path
     System.out.println("---------------------");
     System.out.println("Road after robot finding in maze: ");
     for (int mapDeployed = 0; mapDeployed < maze.map.length ; mapDeployed++) {
@@ -460,6 +469,7 @@ class Robot {
     }
   }
 
+  // run the robot
   public void navigate() {
     solver();
     printMapAfter();
