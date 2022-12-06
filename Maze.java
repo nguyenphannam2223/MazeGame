@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class MazeTest {
+public class Maze {
 
     // Initialize the maze and its parameters
 
@@ -15,7 +15,7 @@ public class MazeTest {
     int steps; // steps to solve the maze
 
   // Constructor of the maze
-  public MazeTest() {
+  public Maze() {
 
 
 
@@ -244,7 +244,7 @@ class Robot {
       ArrayList<ArrayList<Integer>> visitedCoordinates = new ArrayList<>();
 
       // create the maze
-      MazeTest maze = new MazeTest();
+      Maze maze = new Maze();
 
       // the result to keep the program running
       String result = "";
