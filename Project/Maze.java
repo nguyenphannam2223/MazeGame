@@ -1,3 +1,7 @@
+package Project;
+
+import Project.LinkedListStack;
+
 public class Maze {
   // Attributes
   private int rows;
@@ -26,9 +30,9 @@ public class Maze {
   // Methods
   public String go(String direction) {
     if (!direction.equals("UP") &&
-      !direction.equals("DOWN") &&
-      !direction.equals("LEFT") &&
-      !direction.equals("RIGHT")) {
+            !direction.equals("DOWN") &&
+            !direction.equals("LEFT") &&
+            !direction.equals("RIGHT")) {
       // invalid direction
       steps++;
       return "false";
@@ -72,24 +76,36 @@ public class Maze {
 class Robot {
   // A very simple implementation
   // where the robot just go randomly
+  int robotStartRow = 1;
+  int robotStartCol = 1;
+  LinkedListStack<Integer> coordinatesStack = new LinkedListStack<Integer>();
+  public Object Coordinates;
+
   public void navigate() {
     Maze maze = new Maze();
     String result = "";
-    while (!result.equals("win")) {
-      double rnd = Math.random();
-      if (rnd <= 0.25) {
-        System.out.println("UP");
-        result = maze.go("UP");
-      } else if (rnd <= 0.50) {
-        System.out.println("DOWN");
-        result = maze.go("DOWN");
-      } else if (rnd <= 0.75) {
-        System.out.println("LEFT");
-        result = maze.go("LEFT");
-      } else {
-        System.out.println("RIGHT");
-        result = maze.go("RIGHT");
-      }
-    }
+
+    coordinatesStack.push(new Coordinates(robotStartCol, robotStartCol));
+
+    System.out.println(toString(coordinatesStack.peek()));
+
+
+
+
+
+
+  }
+
+}
+
+class Coordinates {
+  int X_coord;
+  int Y_coord;
+
+  public Coordinates() {}
+
+  public Coordinates(int X, int Y) {
+    X = X_coord;
+    Y = Y_coord;
   }
 }
