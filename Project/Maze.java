@@ -15,6 +15,9 @@ public class Maze {
         // Note: in my real test, I will create much larger
         // and more complicated map
         map = new String[]{
+
+
+
                 "....................................................................................................",
                 ".                                              ..                                                  .",
                 ".                                              ..                          ..                      .",
@@ -283,6 +286,7 @@ class Robot {
                 directionStack.push("UP");
                 numOfDirections++;
 
+
                 if (result.equals("false")) {
                     hitWall("UP");
                 }
@@ -326,6 +330,7 @@ class Robot {
                 if (result.equals("false")) {
                     hitWall("LEFT");
                 }
+
             } else {
                 solveDeadEnd();
             }
@@ -338,7 +343,8 @@ class Robot {
             numOfCoords++;
         }
 
-        System.out.println(ANSI_CYAN + "Moving priorities: UP RIGHT LEFT DOWN" + ANSI_RESET);
+        System.out.println(ANSI_CYAN + "Moving priorities: UP RIGHT LEFT DOWN. On first time, the robot will bump into walls and walk to dead-ends. " +
+                "The shortest way will be the optimal way to reach X based on the path explored by robot" + ANSI_RESET);
         System.out.println(ANSI_PURPLE + "After the robot reaches X, the shortest way to X is: " + numOfDirections + " step(s)" + ANSI_RESET);
     }
 }
