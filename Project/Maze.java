@@ -111,18 +111,20 @@ public class Maze {
 }
 
 class Robot {
-    // A very simple implementation
-    // where the robot just go randomly
+    // create the maze
     Maze maze = new Maze();
 
-    int numOfCoords = 1;
-    int numOfDirections = 0;
+    int numOfCoords = 1;        // variable of map size when robot doesn't know the current
+    int numOfDirections = 0;    // number of direction
 
+    // consider the current position of the robot as virtual coordinates
     int robotStartRow = 0;
     int robotStartCol = 0;
 
-
+    // the result to keep the program running
     String result = "";
+
+    // Command line styles
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_YELLOW = "\u001B[33m";
@@ -134,7 +136,7 @@ class Robot {
     LinkedListStack<Integer> directionStack = new LinkedListStack<>();
     int[][] visitedCoordinates = new int[1][2];
 
-
+    // Check if a coordination is visited or not
     public boolean checkExistCoords(int[] coords) {
 
         for (int[] visitedCoordinate : visitedCoordinates) {
@@ -158,6 +160,7 @@ class Robot {
 
     }
 
+    
     public boolean checkExistCoordsUp() {
         int[] upperCoords = new int[2];
 
@@ -170,6 +173,12 @@ class Robot {
 
         return checkExistCoords(upperCoords);
     }
+
+    /*
+    check if position above is a wall
+        return false if the position above the robot is wall
+        return true if it is not a wall 
+    */
 
     public boolean checkExistCoordsDown() {
         int[] belowCoords = new int[2];
@@ -207,6 +216,7 @@ class Robot {
         return checkExistCoords(rightCoords);
     }
 
+    /* */
     public void hitWall(String direction) {
         System.out.println(ANSI_RED + "Oops! Robot hits a wall. The robot going back" + ANSI_RESET);
 
@@ -218,22 +228,22 @@ class Robot {
         visitedCoordinates[numOfCoords][1] = robotStartRow;
 
         switch (direction) {
-            case "UP" -> {
+            case "UP":
                 System.out.println(ANSI_YELLOW + "Going back DOWN" + ANSI_RESET);
                 robotStartRow++;
-            }
-            case "RIGHT" -> {
+                break;
+            case "RIGHT":
                 System.out.println(ANSI_YELLOW + "Going back LEFT" + ANSI_RESET);
                 robotStartCol--;
-            }
-            case "DOWN" -> {
+                break;
+            case "DOWN":
                 System.out.println(ANSI_YELLOW + "Going back UP" + ANSI_RESET);
                 robotStartRow--;
-            }
-            default -> {
+                break;
+            default:
                 System.out.println(ANSI_YELLOW + "Going back RIGHT" + ANSI_RESET);
                 robotStartCol++;
-            }
+                break;
         }
 
         numOfCoords++;
@@ -242,40 +252,62 @@ class Robot {
 
     }
 
+    
+
+    /*
+      solving when robot goes into a dead-end
+
+      Definition of a dead-end:
+      1) From the robot current location, 3 directions of the robot are walls and have no choice other than going back
+      2) From the robot current location, 4 directions of the robot are already visited location
+      
+
+     
+       */
     public void solveDeadEnd() {
         System.out.println(ANSI_RED + "Oops dead-end! Backtracking next step" + ANSI_RESET);
         String lastDirection = directionStack.peek();
 
         switch (lastDirection) {
-            case "UP" -> {
+            case "UP":
                 System.out.println(ANSI_RED + "Backtracking: going DOWN" + ANSI_RESET);
                 result = maze.go("DOWN");
                 robotStartRow++;
                 break;
-            }
-            case "RIGHT" -> {
+            case "RIGHT":
                 System.out.println(ANSI_RED + "Backtracking: going LEFT" + ANSI_RESET);
                 result = maze.go("LEFT");
                 robotStartCol--;
                 break;
-            }
-            case "DOWN" -> {
+            case "DOWN":
                 System.out.println(ANSI_RED + "Backtracking: going UP" + ANSI_RESET);
                 result = maze.go("UP");
                 robotStartRow--;
                 break;
-            }
-            default -> {
+            default:
                 System.out.println(ANSI_RED + "Backtracking: going RIGHT" + ANSI_RESET);
                 result = maze.go("RIGHT");
                 robotStartCol++;
                 break;
-            }
         }
 
         directionStack.pop();
     }
 
+
+    /* 
+     * Step 1: the robot add its current location
+     * Step 2: the robot check direction (UP first) for walls
+     * step 3: the robot check whether the coordinate is already visited or not
+     * 
+     * If it's not visited
+     * 
+     * 
+     * 
+     * 
+     * 
+     *  
+    */
     public void navigate() {
 
 
@@ -352,6 +384,8 @@ class Robot {
             numOfCoords++;
         }
 
+        directionStack.display("Robot direction: ") ;
+        
         System.out.println(ANSI_CYAN + "Moving priorities: UP RIGHT LEFT DOWN. On first time, the robot will bump into walls and walk to dead-ends. " +
                 "The shortest way will be the optimal way to reach X based on the path explored by robot" + ANSI_RESET);
         System.out.println(ANSI_PURPLE + "After the robot reaches X, the shortest way to X is: " + numOfDirections + " step(s)" + ANSI_RESET);
