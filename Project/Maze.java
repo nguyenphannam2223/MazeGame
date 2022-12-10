@@ -208,7 +208,7 @@ class Robot {
     }
 
     public void hitWall(String direction) {
-        System.out.println(ANSI_RED + "Oops! Robot hits a wall. The robot going back" + ANSI_RESET);
+        System.out.println(ANSI_RED + "Oops! Robot hits a wall. The robot is going back" + ANSI_RESET);
 
         directionStack.pop();
         numOfDirections--;
