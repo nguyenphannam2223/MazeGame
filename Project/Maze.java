@@ -15,44 +15,42 @@ public class Maze {
         // Note: in my real test, I will create much larger
         // and more complicated map
         map = new String[]{
-                ".......",
-                ".    X.",
-                ".     .",
-                ".     .",
-                ".......",
+                // ".......",
+                // ".    X.",
+                // ".     .",
+                // ".     .",
+                // ".......",
 
-
-//
-//                "....................................................................................................",
-//                ".                                              ..                                                  .",
-//                ".                                              ..                          ..                      .",
-//                ".                                              ..                          ..                      .",
-//                ".      ..............                          ..                  ...     ..                      .",
-//                ".            .............                     ..                  ...     ..   ....................",
-//                ".                                              ..                  ...     ..   ....................",
-//                ".       ....  .   .  .  .....                                                   ...     ..         .",
-//                ".       .  .  .. ..  .    .            ........                     .........   ...     ..         .",
-//                ".       ....  . . .  .    .            ........                    .........    ...     ..         .",
-//                ".       ..    .   .  .    .            ........                                 ...     ..         .",
-//                ".       . .   .   .  .    .        .   ........                        ..                       ....",
-//                ".       .  .  .   .  .    .        .   ........                        ..                       ....",
-//                ".                                  .                                   ..  ..           .......    .",
-//                ".    ..       ..    ..       ..    .        ..      ..    ...          ..  ..           .......    .",
-//                ".    ....     ..    ....     ..    .        ..      ..    .....        ..  ..                      .",
-//                ".    .. ..    ..    .. ..    ..        .    ..      ..    ..  ...  ..      ..                      .",
-//                ".    ..  ..   ..    ..  ..   ..   .......   ..........    ..   ..  ..      ..                      .",
-//                ".    ..   ..  ..    ..   ..  ..   .......   ..........    ..   ..  ..      ..                      .",
-//                ".    ..    .. ..    ..    .. ..        .    ..      ..    ..  ...          ..                      .",
-//                ".    ..     ....    ..     ....             ..      ..    .....            ..    ..........        .",
-//                ".    ..       ..    ..       ..             ..      ..    ...              ..    ..........        .",
-//                ".                                                                          ..                      .",
-//                ".      .            .           .            .                             ..          X           .",
-//                ".      .     .      .           .            .                             ..                      .",
-//                ".      .     .      .                        .        .                    ..                      .",
-//                ".      .     .      .                        .        .                    ..                      .",
-//                ".      .     .      .           .            .        .                    ..                      .",
-//                ".            .                  .                     .                    ..                      .",
-//                "....................................................................................................",
+        //    "....................................................................................................",
+        //    ".                                              ..                                                  .",
+        //    ".                                              ..                          ..                      .",
+        //    ".                                              ..                          ..                      .",
+        //    ".      ..............                          ..                  ...     ..                      .",
+        //    ".            .............                     ..                  ...     ..   ....................",
+        //    ".                                              ..                  ...     ..   ....................",
+        //    ".       ....  .   .  .  .....                                                   ...     ..         .",
+        //    ".       .  .  .. ..  .    .            ........                     .........   ...     ..         .",
+        //    ".       ....  . . .  .    .            ........                    .........    ...     ..         .",
+        //    ".       ..    .   .  .    .            ........                                 ...     ..         .",
+        //    ".       . .   .   .  .    .        .   ........                        ..                       ....",
+        //    ".       .  .  .   .  .    .        .   ........                        ..                       ....",
+        //    ".                                  .                                   ..  ..           .......    .",
+        //    ".    ..       ..    ..       ..    .        ..      ..    ...          ..  ..           .......    .",
+        //    ".    ....     ..    ....     ..    .        ..      ..    .....        ..  ..                      .",
+        //    ".    .. ..    ..    .. ..    ..        .    ..      ..    ..  ...  ..      ..                      .",
+        //    ".    ..  ..   ..    ..  ..   ..   .......   ..........    ..   ..  ..      ..                      .",
+        //    ".    ..   ..  ..    ..   ..  ..   .......   ..........    ..   ..  ..      ..                      .",
+        //    ".    ..    .. ..    ..    .. ..        .    ..      ..    ..  ...          ..                      .",
+        //    ".    ..     ....    ..     ....             ..      ..    .....            ..    ..........        .",
+        //    ".    ..       ..    ..       ..             ..      ..    ...              ..    ..........        .",
+        //    ".                                                                          ..                      .",
+        //    ".      .            .           .            .                             ..          X           .",
+        //    ".      .     .      .           .            .                             ..                      .",
+        //    ".      .     .      .                        .        .                    ..                      .",
+        //    ".      .     .      .                        .        .                    ..                      .",
+        //    ".      .     .      .           .            .        .                    ..                      .",
+        //    ".            .                  .                     .                    ..                      .",
+        //    "....................................................................................................",
         };
         rows = map.length;
         cols = map[0].length();
@@ -132,20 +130,9 @@ class Robot {
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
 
-
-    LinkedListStack<Integer> directionStack = new LinkedListStack<>();
+    // direction record of the robot has gone
+    LinkedListStack<String> directionStack = new LinkedListStack<>();
     int[][] visitedCoordinates = new int[1][2];
-
-    // Check if a coordination is visited or not
-    public boolean checkExistCoords(int[] coords) {
-
-        for (int[] visitedCoordinate : visitedCoordinates) {
-            if (coords[0] == visitedCoordinate[0] && coords[1] == visitedCoordinate[1]) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     // increase size of array
     public void assignCoords() {
@@ -160,7 +147,21 @@ class Robot {
 
     }
 
-    
+    /*
+     * Check 4 direction of robot current location which has been going through or not
+     */
+
+    // check if robot has gone to this location or not
+    public boolean checkExistCoords(int[] coords) {
+        for (int[] visitedCoordinate : visitedCoordinates) {
+            if (coords[0] == visitedCoordinate[0] && coords[1] == visitedCoordinate[1]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // check top location
     public boolean checkExistCoordsUp() {
         int[] upperCoords = new int[2];
 
@@ -174,12 +175,8 @@ class Robot {
         return checkExistCoords(upperCoords);
     }
 
-    /*
-    check if position above is a wall
-        return false if the position above the robot is wall
-        return true if it is not a wall 
-    */
-
+    
+    // check bottom direction
     public boolean checkExistCoordsDown() {
         int[] belowCoords = new int[2];
 
@@ -192,6 +189,7 @@ class Robot {
         return checkExistCoords(belowCoords);
     }
 
+    // check left direction
     public boolean checkExistCoordsLeft() {
         int[] leftCoords = new int[2];
 
@@ -204,6 +202,7 @@ class Robot {
         return checkExistCoords(leftCoords);
     }
 
+    // check right direction
     public boolean checkExistCoordsRight() {
         int[] rightCoords = new int[2];
 
@@ -216,7 +215,10 @@ class Robot {
         return checkExistCoords(rightCoords);
     }
 
-    /* */
+    /*
+    check if robot current position is a wall
+        
+    */
     public void hitWall(String direction) {
         System.out.println(ANSI_RED + "Oops! Robot hits a wall. The robot is going back" + ANSI_RESET);
 
@@ -255,15 +257,17 @@ class Robot {
     
 
     /*
-      solving when robot goes into a dead-end
+        solving when robot goes into a dead-end
 
-      Definition of a dead-end:
-      1) From the robot current location, 3 directions of the robot are walls and have no choice other than going back
-      2) From the robot current location, 4 directions of the robot are already visited location
+        Definition of a dead-end:
+        1) From the robot current location, 3 directions of the robot are walls and have no choice other than going back
+        2) From the robot current location, 4 directions of the robot are already visited location
       
-
+        How to solve dead end:
+        Check each reversed direction can go, if that direction can go, the robot will go until robot can go to another direction.
+        And directions after robot has finished going backward is removed.
      
-       */
+    */
     public void solveDeadEnd() {
         System.out.println(ANSI_RED + "Oops dead-end! Backtracking next step" + ANSI_RESET);
         String lastDirection = directionStack.peek();
@@ -296,17 +300,13 @@ class Robot {
 
 
     /* 
-     * Step 1: the robot add its current location
-     * Step 2: the robot check direction (UP first) for walls
-     * step 3: the robot check whether the coordinate is already visited or not
+     *  Starting by set the current robot standing is coordinate (0, 0)
+     *  The robot will walk around until reaching the way out 'X'. There are 2 conditions to reach the way out.
+     *      - Condition 01: IF robot touch 'wall', it will go backward when facing walls and dodge that wall.
+     *      - Condition 02: IF robot reach dead end, it will go backward that road until it find another way to go. 
      * 
-     * If it's not visited
-     * 
-     * 
-     * 
-     * 
-     * 
-     *  
+     *  During robot is walking, it's recorded direction and amount of steps to the list so when reaching the way out, 
+     * the direction list will show to user. 
     */
     public void navigate() {
 
@@ -384,6 +384,8 @@ class Robot {
             numOfCoords++;
         }
 
+
+        // Display the result of the maze solver
         directionStack.display("Robot direction: ") ;
         
         System.out.println(ANSI_CYAN + "Moving priorities: UP RIGHT LEFT DOWN. On first time, the robot will bump into walls and walk to dead-ends. " +
