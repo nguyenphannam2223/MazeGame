@@ -107,6 +107,15 @@ public class Maze {
     }
 }
 
+class Style {
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+}
+
 
 // robot class
 class Robot {
@@ -124,12 +133,7 @@ class Robot {
     String result = "";
 
     // Command line styles
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String ANSI_CYAN = "\u001B[36m";
+
 
     // stack to record robot's direction
     LinkedListStack<String> directionStack = new LinkedListStack<>();
@@ -231,7 +235,7 @@ class Robot {
     public void hitWall(String direction) {
 
         // announce the user
-        System.out.println(ANSI_RED + "Oops! Robot hits a wall. The robot is going back" + ANSI_RESET);
+        System.out.println(Style.ANSI_RED + "Oops! Robot hits a wall. The robot is going back" + Style.ANSI_RESET);
 
         // pop the last stack (direction)
         directionStack.pop();
@@ -246,19 +250,19 @@ class Robot {
         // going back based on last direction before the robot hit the wall
         switch (direction) {
             case "UP":
-                System.out.println(ANSI_YELLOW + "Going back DOWN" + ANSI_RESET);
+                System.out.println(Style.ANSI_YELLOW + "Going back DOWN" + Style.ANSI_RESET);
                 robotStartRow++;
                 break;
             case "RIGHT":
-                System.out.println(ANSI_YELLOW + "Going back LEFT" + ANSI_RESET);
+                System.out.println(Style.ANSI_YELLOW + "Going back LEFT" + Style.ANSI_RESET);
                 robotStartCol--;
                 break;
             case "DOWN":
-                System.out.println(ANSI_YELLOW + "Going back UP" + ANSI_RESET);
+                System.out.println(Style.ANSI_YELLOW + "Going back UP" + Style.ANSI_RESET);
                 robotStartRow--;
                 break;
             default:
-                System.out.println(ANSI_YELLOW + "Going back RIGHT" + ANSI_RESET);
+                System.out.println(Style.ANSI_YELLOW + "Going back RIGHT" + Style.ANSI_RESET);
                 robotStartCol++;
                 break;
         }
@@ -288,29 +292,29 @@ class Robot {
     public void solveDeadEnd() {
 
         // announce the user
-        System.out.println(ANSI_RED + "Oops dead-end! Backtracking next step" + ANSI_RESET);
+        System.out.println(Style.ANSI_RED + "Oops dead-end! Backtracking next step" + Style.ANSI_RESET);
 
         // get the last direction moved by the robot
         String lastDirection = directionStack.peek();
 
         switch (lastDirection) {
             case "UP":
-                System.out.println(ANSI_RED + "Backtracking: going DOWN" + ANSI_RESET);
+                System.out.println(Style.ANSI_RED + "Backtracking: going DOWN" + Style.ANSI_RESET);
                 result = maze.go("DOWN");
                 robotStartRow++;
                 break;
             case "RIGHT":
-                System.out.println(ANSI_RED + "Backtracking: going LEFT" + ANSI_RESET);
+                System.out.println(Style.ANSI_RED + "Backtracking: going LEFT" + Style.ANSI_RESET);
                 result = maze.go("LEFT");
                 robotStartCol--;
                 break;
             case "DOWN":
-                System.out.println(ANSI_RED + "Backtracking: going UP" + ANSI_RESET);
+                System.out.println(Style.ANSI_RED + "Backtracking: going UP" + Style.ANSI_RESET);
                 result = maze.go("UP");
                 robotStartRow--;
                 break;
             default:
-                System.out.println(ANSI_RED + "Backtracking: going RIGHT" + ANSI_RESET);
+                System.out.println(Style.ANSI_RED + "Backtracking: going RIGHT" + Style.ANSI_RESET);
                 result = maze.go("RIGHT");
                 robotStartCol++;
                 break;
@@ -369,7 +373,7 @@ class Robot {
 
 
             if (!checkExistCoordsUp()) {
-                System.out.println(ANSI_GREEN + "The robot goes up" + ANSI_RESET);
+                System.out.println(Style.ANSI_GREEN + "The robot goes up" + Style.ANSI_RESET);
                 result = maze.go("UP");
                 robotStartRow--;
 
@@ -382,7 +386,7 @@ class Robot {
                 }
 
             } else if (!checkExistCoordsRight()) {
-                System.out.println(ANSI_GREEN + "The robot goes right" + ANSI_RESET);
+                System.out.println(Style.ANSI_GREEN + "The robot goes right" + Style.ANSI_RESET);
                 result = maze.go("RIGHT");
                 robotStartCol++;
 
@@ -397,7 +401,7 @@ class Robot {
 
 
             } else if (!checkExistCoordsDown()) {
-                System.out.println(ANSI_GREEN + "The robot goes down" + ANSI_RESET);
+                System.out.println(Style.ANSI_GREEN + "The robot goes down" + Style.ANSI_RESET);
                 result = maze.go("DOWN");
                 robotStartRow++;
 
@@ -412,7 +416,7 @@ class Robot {
 
 
             } else if (!checkExistCoordsLeft()) {
-                System.out.println(ANSI_GREEN + "The robot goes left" + ANSI_RESET);
+                System.out.println(Style.ANSI_GREEN + "The robot goes left" + Style.ANSI_RESET);
                 result = maze.go("LEFT");
                 robotStartCol--;
 
@@ -437,10 +441,10 @@ class Robot {
             numOfCoords++;
         }
 
-        System.out.println(ANSI_CYAN + "Moving priorities: UP RIGHT LEFT DOWN. On first time, the robot will bump into walls and walk to dead-ends. " +
-                "The shortest way will be the optimal way to reach X based on the path explored by robot" + ANSI_RESET);
+        System.out.println(Style.ANSI_CYAN + "Moving priorities: UP RIGHT LEFT DOWN. On first time, the robot will bump into walls and walk to dead-ends. " +
+                "The shortest way will be the optimal way to reach X based on the path explored by robot" + Style.ANSI_RESET);
 
-        System.out.println(ANSI_PURPLE + "After the robot reaches X, the shortest way to X is: " + numOfDirections + " step(s)" + ANSI_RESET);
+        System.out.println(Style.ANSI_PURPLE + "After the robot reaches X, the shortest way to X is: " + numOfDirections + " step(s)" + Style.ANSI_RESET);
 
         // Display the result of the optimal way of maze solver
         robotDirection();
