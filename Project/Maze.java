@@ -1,6 +1,8 @@
 package Project;
 
 
+import java.util.Arrays;
+
 public class Maze {
     // Attributes
     private int rows;
@@ -15,42 +17,42 @@ public class Maze {
         // Note: in my real test, I will create much larger
         // and more complicated map
         map = new String[]{
-                // ".......",
-                // ".    X.",
-                // ".     .",
-                // ".     .",
-                // ".......",
+//                 ".......",
+//                 ".    X.",
+//                 ".     .",
+//                 ".     .",
+//                 ".......",
 
-        //    "....................................................................................................",
-        //    ".                                              ..                                                  .",
-        //    ".                                              ..                          ..                      .",
-        //    ".                                              ..                          ..                      .",
-        //    ".      ..............                          ..                  ...     ..                      .",
-        //    ".            .............                     ..                  ...     ..   ....................",
-        //    ".                                              ..                  ...     ..   ....................",
-        //    ".       ....  .   .  .  .....                                                   ...     ..         .",
-        //    ".       .  .  .. ..  .    .            ........                     .........   ...     ..         .",
-        //    ".       ....  . . .  .    .            ........                    .........    ...     ..         .",
-        //    ".       ..    .   .  .    .            ........                                 ...     ..         .",
-        //    ".       . .   .   .  .    .        .   ........                        ..                       ....",
-        //    ".       .  .  .   .  .    .        .   ........                        ..                       ....",
-        //    ".                                  .                                   ..  ..           .......    .",
-        //    ".    ..       ..    ..       ..    .        ..      ..    ...          ..  ..           .......    .",
-        //    ".    ....     ..    ....     ..    .        ..      ..    .....        ..  ..                      .",
-        //    ".    .. ..    ..    .. ..    ..        .    ..      ..    ..  ...  ..      ..                      .",
-        //    ".    ..  ..   ..    ..  ..   ..   .......   ..........    ..   ..  ..      ..                      .",
-        //    ".    ..   ..  ..    ..   ..  ..   .......   ..........    ..   ..  ..      ..                      .",
-        //    ".    ..    .. ..    ..    .. ..        .    ..      ..    ..  ...          ..                      .",
-        //    ".    ..     ....    ..     ....             ..      ..    .....            ..    ..........        .",
-        //    ".    ..       ..    ..       ..             ..      ..    ...              ..    ..........        .",
-        //    ".                                                                          ..                      .",
-        //    ".      .            .           .            .                             ..          X           .",
-        //    ".      .     .      .           .            .                             ..                      .",
-        //    ".      .     .      .                        .        .                    ..                      .",
-        //    ".      .     .      .                        .        .                    ..                      .",
-        //    ".      .     .      .           .            .        .                    ..                      .",
-        //    ".            .                  .                     .                    ..                      .",
-        //    "....................................................................................................",
+            "....................................................................................................",
+            ".                                              ..                                                  .",
+            ".                                              ..                          ..                      .",
+            ".                                              ..                          ..                      .",
+            ".      ..............                          ..                  ...     ..                      .",
+            ".            .............                     ..                  ...     ..   ....................",
+            ".                                              ..                  ...     ..   ....................",
+            ".       ....  .   .  .  .....                                                   ...     ..         .",
+            ".       .  .  .. ..  .    .            ........                     .........   ...     ..         .",
+            ".       ....  . . .  .    .            ........                    .........    ...     ..         .",
+            ".       ..    .   .  .    .            ........                                 ...     ..         .",
+            ".       . .   .   .  .    .        .   ........                        ..                       ....",
+            ".       .  .  .   .  .    .        .   ........                        ..                       ....",
+            ".                                  .                                   ..  ..           .......    .",
+            ".    ..       ..    ..       ..    .        ..      ..    ...          ..  ..           .......    .",
+            ".    ....     ..    ....     ..    .        ..      ..    .....        ..  ..                      .",
+            ".    .. ..    ..    .. ..    ..        .    ..      ..    ..  ...  ..      ..                      .",
+            ".    ..  ..   ..    ..  ..   ..   .......   ..........    ..   ..  ..      ..                      .",
+            ".    ..   ..  ..    ..   ..  ..   .......   ..........    ..   ..  ..      ..                      .",
+            ".    ..    .. ..    ..    .. ..        .    ..      ..    ..  ...          ..                      .",
+            ".    ..     ....    ..     ....             ..      ..    .....            ..    ..........        .",
+            ".    ..       ..    ..       ..             ..      ..    ...              ..    ..........        .",
+            ".                                                                          ..                      .",
+            ".      .            .           .            .                             ..          X           .",
+            ".      .     .      .           .            .                             ..                      .",
+            ".      .     .      .                        .        .                    ..                      .",
+            ".      .     .      .                        .        .                    ..                      .",
+            ".      .     .      .           .            .        .                    ..                      .",
+            ".            .                  .                     .                    ..                      .",
+            "....................................................................................................",
         };
         rows = map.length;
         cols = map[0].length();
@@ -108,14 +110,16 @@ public class Maze {
     }
 }
 
+
+// robot class
 class Robot {
     // create the maze
     Maze maze = new Maze();
 
-    int numOfCoords = 1;        // variable of map size when robot doesn't know the current
-    int numOfDirections = 0;    // number of direction
+    int numOfCoords = 1;        // number of coordinates added into the 2D array, use to increase size of the array
+    int numOfDirections = 0;    // number of direction, use as number of stacks
 
-    // consider the current position of the robot as virtual coordinates
+    // consider the current position of the robot as virtual coordinates (0,0) regardless of its spawn position
     int robotStartRow = 0;
     int robotStartCol = 0;
 
@@ -130,16 +134,20 @@ class Robot {
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
 
-    // direction record of the robot has gone
+    // stack to record robot's direction
     LinkedListStack<String> directionStack = new LinkedListStack<>();
+
+
+    // 2D array to store virtual coordinates
     int[][] visitedCoordinates = new int[1][2];
 
-    // increase size of array
+    // increase size of 2D array
     public void assignCoords() {
 
-        int[][] temp = new int[numOfCoords + 1][2];
+        int[][] temp = new int[numOfCoords + 1][2]; // Initialize of temp 2D array
 
         int length = visitedCoordinates.length;
+
         for (int i = 0; i < length; i++) {
             temp[i] = visitedCoordinates[i];
         }
@@ -148,11 +156,15 @@ class Robot {
     }
 
     /*
-     * Check 4 direction of robot current location which has been going through or not
+     * Check 4 direction of robot current location to see if it has been going through or not
      */
 
     // check if robot has gone to this location or not
     public boolean checkExistCoords(int[] coords) {
+        /*
+        return true if the coordinate is in the 2D array
+        return false if the coordinate isn't in the 2D array
+         */
         for (int[] visitedCoordinate : visitedCoordinates) {
             if (coords[0] == visitedCoordinate[0] && coords[1] == visitedCoordinate[1]) {
                 return true;
@@ -216,19 +228,25 @@ class Robot {
     }
 
     /*
-    check if robot current position is a wall
+    call this function when robots hit a wall
         
     */
     public void hitWall(String direction) {
+
+        // announce the user
         System.out.println(ANSI_RED + "Oops! Robot hits a wall. The robot is going back" + ANSI_RESET);
 
+        // pop the last stack (direction)
         directionStack.pop();
+
+        // decrease the number of stacks
         numOfDirections--;
 
-
+        // assign the coordinates into the 2D array
         visitedCoordinates[numOfCoords][0] = robotStartCol;
         visitedCoordinates[numOfCoords][1] = robotStartRow;
 
+        // going back based on last direction before the robot hit the wall
         switch (direction) {
             case "UP":
                 System.out.println(ANSI_YELLOW + "Going back DOWN" + ANSI_RESET);
@@ -248,8 +266,10 @@ class Robot {
                 break;
         }
 
+        // increase the number of added coordinates into the 2D array
         numOfCoords++;
 
+        // increase number of size of 2D array
         assignCoords();
 
     }
@@ -269,7 +289,11 @@ class Robot {
      
     */
     public void solveDeadEnd() {
+
+        // announce the user
         System.out.println(ANSI_RED + "Oops dead-end! Backtracking next step" + ANSI_RESET);
+
+        // get the last direction moved by the robot
         String lastDirection = directionStack.peek();
 
         switch (lastDirection) {
@@ -296,26 +320,43 @@ class Robot {
         }
 
         directionStack.pop();
+
+        numOfDirections--;
+    }
+
+    public void robotDirection() {
+        String [] robotdirection = new String[numOfDirections];
+        String direction;
+
+        for (int i = 0; i < numOfDirections; i++) {
+            direction = directionStack.peek();
+            robotdirection[numOfDirections - 1 - i] = direction;
+            directionStack.pop();
+        }
+
+        System.out.println(Arrays.toString(robotdirection));
     }
 
 
     /* 
      *  Starting by set the current robot standing is coordinate (0, 0)
-     *  The robot will walk around until reaching the way out 'X'. There are 2 conditions to reach the way out.
-     *      - Condition 01: IF robot touch 'wall', it will go backward when facing walls and dodge that wall.
-     *      - Condition 02: IF robot reach dead end, it will go backward that road until it find another way to go. 
+     *  The robot will walk according to moving priorities (UP RIGHT DOWN LEFT) until reaching the way out 'X'. There are 2 conditions to reach the way out.
+     *      - Condition 01: IF robot touch 'wall', it will go backward based on the last direction when hitting walls and dodge that wall.
+     *      - Condition 02: IF robot reach dead-end, it will backtracking that road until it find another way to go.
      * 
-     *  During robot is walking, it's recorded direction and amount of steps to the list so when reaching the way out, 
+     *  During robot is walking, it's recorded direction using stacks and amount of steps so when reaching the way out,
      * the direction list will show to user. 
     */
     public void navigate() {
 
-
+        // add the (0,0) coordinate to the 2D array
         visitedCoordinates[0][0] = robotStartCol;
         visitedCoordinates[0][1] = robotStartRow;
 
+        // when robot hasn't reached X yet
         while (!result.equals("win")) {
 
+            // increase size of array by 1
             assignCoords();
 
 
@@ -327,7 +368,7 @@ class Robot {
                 directionStack.push("UP");
                 numOfDirections++;
 
-
+                // when the robot hit walls
                 if (result.equals("false")) {
                     hitWall("UP");
                 }
@@ -340,6 +381,7 @@ class Robot {
                 directionStack.push("RIGHT");
                 numOfDirections++;
 
+                // when the robot hit walls
                 if (result.equals("false")) {
                     hitWall("RIGHT");
                 }
@@ -354,6 +396,7 @@ class Robot {
                 directionStack.push("DOWN");
                 numOfDirections++;
 
+                // when the robot hit walls
                 if (result.equals("false")) {
                     hitWall("DOWN");
                 }
@@ -368,28 +411,31 @@ class Robot {
                 directionStack.push("LEFT");
                 numOfDirections++;
 
+                // when the robot hit walls
                 if (result.equals("false")) {
                     hitWall("LEFT");
                 }
 
             } else {
+                // when robot has reached the dead-end
                 solveDeadEnd();
             }
 
-
+            // assign coordinates to the 2D array
             visitedCoordinates[numOfCoords][0] = robotStartCol;
             visitedCoordinates[numOfCoords][1] = robotStartRow;
 
-
+            // increase the number of coordinates added into the 2D array
             numOfCoords++;
         }
 
 
-        // Display the result of the maze solver
-        directionStack.display("Robot direction: ") ;
-        
         System.out.println(ANSI_CYAN + "Moving priorities: UP RIGHT LEFT DOWN. On first time, the robot will bump into walls and walk to dead-ends. " +
                 "The shortest way will be the optimal way to reach X based on the path explored by robot" + ANSI_RESET);
+
         System.out.println(ANSI_PURPLE + "After the robot reaches X, the shortest way to X is: " + numOfDirections + " step(s)" + ANSI_RESET);
+
+        // Display the result of the optimal way of maze solver
+        robotDirection();
     }
 }
