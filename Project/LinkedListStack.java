@@ -59,20 +59,4 @@ public class LinkedListStack<T> {
         }
         return (String) head.data;
     }
-
-    public void display(String message){
-        Node current = head;
-
-        if(head == null) {    
-            System.out.println("List is empty");    
-            return;    
-        }    
-        System.out.println(message);    
-        while(current != null) {    
-            //Prints each node by incrementing pointer    
-            System.out.print(current.data + " ");    
-            current = current.next;    
-        }    
-        System.out.println("\n");
-    }
 }
