@@ -107,6 +107,7 @@ public class Maze {
     }
 }
 
+// Command line styles Class
 class Style {
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_RESET = "\u001B[0m";
@@ -122,17 +123,17 @@ class Robot {
     // create the maze
     Maze maze = new Maze();
 
-    int numOfCoords = 1;        // number of coordinates added into the 2D array, use to increase size of the array
-    int numOfDirections = 0;    // number of direction, use as number of stacks
+    public int numOfCoords = 1;        // number of coordinates added into the 2D array, use to increase size of the array
+    public int numOfDirections = 0;    // number of direction, use as number of stacks
 
     // consider the current position of the robot as virtual coordinates (0,0) regardless of its spawn position
-    int robotStartRow = 0;
-    int robotStartCol = 0;
+    public int robotStartRow = 0;
+    public int robotStartCol = 0;
 
     // the result to keep the program running
-    String result = "";
+    public String result = "";
 
-    // Command line styles
+    
 
 
     // stack to record robot's direction
